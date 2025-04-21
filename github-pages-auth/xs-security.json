@@ -1,0 +1,26 @@
+{
+    "xsappname": "github-pages-auth",
+    "scopes": [
+        {
+            "name": "uaa.user",
+            "description": "UAA"
+        }
+    ],
+    "role-templates": [
+        {
+            "name": "Token_Exchange",
+            "description": "UAA",
+            "scope-references": [
+                "uaa.user"
+            ]
+        }
+    ],
+    "oauth2-configuration": {
+        "redirect-uris": [
+            "http://localhost:3000/**",
+            "https://*.hana.ondemand.com/**",
+            "https://*.applicationstudio.cloud.sap/**",
+            "https://*.github.io/**"
+        ]
+    }
+}
