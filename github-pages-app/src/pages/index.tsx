@@ -1,15 +1,18 @@
 import type { ReactNode } from "react";
 import clsx from "clsx";
-import Link from "@docusaurus/Link";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import Layout from "@theme/Layout";
 import HomepageFeatures from "@site/src/components/HomepageFeatures";
 import Heading from "@theme/Heading";
 
 import styles from "./index.module.css";
+import React from "react";
+import { useAuth } from "../authProvider";
 
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
+  const { isLoggedIn, login, logout, user } = useAuth();
+
   return (
     <header className={clsx("hero hero--primary", styles.heroBanner)}>
       <div className="container">
@@ -18,9 +21,19 @@ function HomepageHeader() {
         </Heading>
         <p className="hero__subtitle">{siteConfig.tagline}</p>
         <div className={styles.buttons}>
-          <Link className="button button--secondary button--lg" to="/docs/intro">
-            Docusaurus Tutorial - 5min ⏱️
-          </Link>
+          {isLoggedIn ? (
+            <div>
+              <p>Welcome, {user.name}!</p>
+              <div>{user.email}</div>
+              <button onClick={logout} className="button button--secondary button--lg">
+                Logout
+              </button>
+            </div>
+          ) : (
+            <button onClick={login} className="button button--secondary button--lg">
+              Login
+            </button>
+          )}
         </div>
       </div>
     </header>
