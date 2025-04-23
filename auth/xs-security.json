@@ -1,5 +1,5 @@
 {
-    "xsappname": "github-pages-auth",
+    "xsappname": "btp-ai-best-practices-auth",
     "scopes": [
         {
             "name": "uaa.user",
