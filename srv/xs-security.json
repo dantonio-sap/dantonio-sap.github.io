@@ -1,0 +1,52 @@
+{
+    "xsappname": "btp-ai-best-practices-auth",
+    "tenant-mode": "dedicated",
+    "scopes": [
+        {
+            "name": "uaa.user",
+            "description": "end user access"
+        },
+        {
+            "name": "$XSAPPNAME.viewer",
+            "description": "read only access to services"
+        },
+        {
+            "name": "$XSAPPNAME.admin",
+            "description": "full access to services"
+        }
+    ],
+    "role-templates": [
+        {
+            "name": "BestPracticesPage_User",
+            "description": "Best Practices Page User",
+            "scope-references": [
+                "uaa.user"
+            ]
+        },
+        {
+            "name": "BestPracticesPage_Viewer",
+            "description": "Best Practices Page Viewer",
+            "scope-references": [
+                "$XSAPPNAME.viewer"
+            ]
+        },
+        {
+            "name": "BestPracticesPage_Admin",
+            "description": "Best Practices Page Admin",
+            "scope-references": [
+                "$XSAPPNAME.viewer",
+                "$XSAPPNAME.admin"
+            ]
+        }
+    ],
+    "oauth2-configuration": {
+        "redirect-uris": [
+            "http://localhost:*/**",
+            "https://*.hana.ondemand.com/**",
+            "https://*.applicationstudio.cloud.sap/**",
+            "https://*.github.io/**"
+        ]
+    },
+    "attributes": [],
+    "authorities-inheritance": false
+}

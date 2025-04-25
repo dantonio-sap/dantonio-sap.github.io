@@ -1,0 +1,72 @@
+_schema-version: 3.3.0
+ID: btp-ai-best-practices-page
+version: 1.0.0
+description: "BTP AI Best Practices Page"
+parameters:
+  enable-parallel-deployments: true
+build-parameters:
+  before-all:
+    - builder: custom
+      commands:
+        - npm ci
+        - npx cds build --production
+
+modules:
+  - name: btp-ai-best-practices-srv
+    type: nodejs
+    path: gen/srv
+    parameters:
+      instances: 1
+      buildpack: nodejs_buildpack
+    build-parameters:
+      builder: npm-ci
+    provides:
+      - name: srv-api # required by consumers of CAP services (e.g. approuter)
+        properties:
+          srv-url: ${default-url}
+    requires:
+      - name: btp-ai-best-practices-db
+      - name: btp-ai-best-practices-auth
+
+  - name: btp-ai-best-practices-db-deployer
+    type: hdb
+    path: gen/db
+    parameters:
+      buildpack: nodejs_buildpack
+    requires:
+      - name: btp-ai-best-practices-db
+
+  - name: btp-ai-best-practices-app
+    type: approuter.nodejs
+    path: app/router
+    parameters:
+      keep-existing-routes: true
+      disk-quota: 256M
+      memory: 256M
+    requires:
+      - name: srv-api
+        group: destinations
+        properties:
+          name: srv-api # must be used in xs-app.json as well
+          url: ~{srv-url}
+          forwardAuthToken: true
+      - name: btp-ai-best-practices-auth
+    build-parameters:
+      ignore: ["node_modules/", "default-env.json", "default-services.json"]
+    properties:
+      CORS: '[{ "uriPattern": "^/(.*)$","allowedOrigin": [{ "host": "dantonio-sap.github.io", "protocol": "https"}] }]'
+      COOKIES: '{ "SameSite": "None"}'
+
+resources:
+  - name: btp-ai-best-practices-db
+    type: com.sap.xs.hdi-container
+    parameters:
+      service: hana
+      service-plan: hdi-shared
+
+  - name: btp-ai-best-practices-auth
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-plan: application
+      path: ./xs-security.json

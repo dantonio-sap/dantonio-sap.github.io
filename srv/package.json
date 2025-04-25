@@ -1,26 +1,45 @@
 {
-  "name": "srv",
+  "name": "btp-ai-best-practices-srv",
   "version": "1.0.0",
-  "description": "A simple CAP project.",
+  "description": "BTP AI Best Practices CAP Service",
   "repository": "<Add your repository here>",
   "license": "UNLICENSED",
   "private": true,
   "dependencies": {
     "@sap/cds": "^8",
-    "express": "^4"
+    "@sap/xssec": "^4",
+    "express": "^4",
+    "@cap-js/hana": "^1"
   },
   "devDependencies": {
-    "@cap-js/sqlite": "^1",
+    "@cap-js/cds-typer": ">=0.1",
     "@cap-js/cds-types": "^0.10.0",
+    "@sap/cds-dk": "^8",
     "@types/node": "^22.0.0",
-    "typescript": "^5",
-    "@cap-js/cds-typer": ">=0.1"
+    "mbt": "^1.2.34",
+    "tsx": "^4.19.3",
+    "typescript": "^5"
   },
   "scripts": {
     "start": "cds-serve",
-    "watch": "cds-tsx w"
+    "watch": "cds-tsx w --profile hybrid",
+    "build": "mbt build",
+    "bind": "cds bind -2 btp-ai-best-practices-db && cds bind -2 btp-ai-best-practices-auth",
+    "update-db": "cds deploy -2 hana",
+    "deploy": "cf deploy mta_archives/btp-ai-best-practices-page_1.0.0.mtar"
   },
   "imports": {
     "#cds-models/*": "./@cds-models/*/index.js"
+  },
+  "cds": {
+    "requires": {
+      "auth": {
+        "kind": "xsuaa",
+        "restrict_all_services": false
+      },
+      "db": {
+        "kind": "hana"
+      }
+    }
   }
 }
