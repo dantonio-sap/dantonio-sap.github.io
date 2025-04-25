@@ -52,5 +52,5 @@ const getUserInfoHandler = async (req: Request) => {
     newUser = await INSERT.into(Users).entries(thisUser);
   }
 
-  return existingUser || newUser;
+  return existingUser || thisUser;
 };

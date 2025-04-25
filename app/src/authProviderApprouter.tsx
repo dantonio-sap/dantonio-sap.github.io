@@ -3,7 +3,7 @@ import React, { createContext, useState, useContext, useEffect } from "react";
 const BTP_API =
   process.env.NODE_ENV === "development"
     ? "http://localhost:5001"
-    : "https://btp-na-practice-github-pages-cd1iy27i-dev-btp-ai-best-p4743f164.cfapps.eu11.hana.ondemand.com";
+    : "https://btp-ai-best-practices-qa-qa-btp-ai-best-practices-app.cfapps.eu10-005.hana.ondemand.com";
 
 interface AuthContextProps {
   isLoggedIn: boolean;
