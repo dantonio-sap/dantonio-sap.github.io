@@ -1,0 +1,3 @@
+GET http://localhost:4004/user/getUserInfo
+Authorization: Bearer {{$oidcAccessToken clientId:sb-btp-ai-best-practices-auth!t554522 callbackPort:404 authorizeEndpoint:https://btp-ai-best-practices-qa-lotrkttg.authentication.eu10.hana.ondemand.com/oauth/authorize tokenEndpoint:https://btp-ai-best-practices-qa-lotrkttg.authentication.eu10.hana.ondemand.com/oauth/token}}
+Accept: application/json

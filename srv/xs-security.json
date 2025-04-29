@@ -21,6 +21,20 @@
             "description": "Best Practices Page User",
             "scope-references": [
                 "uaa.user"
+            ],
+            "attribute-references": [
+                {
+                    "name": "type"
+                },
+                {
+                    "name": "company"
+                },
+                {
+                    "name": "sapBpidOrg"
+                },
+                {
+                    "name": "valid"
+                }
             ]
         },
         {
@@ -47,6 +61,30 @@
             "https://*.github.io/**"
         ]
     },
-    "attributes": [],
-    "authorities-inheritance": false
+    "attributes": [
+        {
+            "name": "type",
+            "description": "user type",
+            "valueType": "s",
+            "valueRequired": false
+        },
+        {
+            "name": "company",
+            "description": "company",
+            "valueType": "s",
+            "valueRequired": false
+        },
+        {
+            "name": "sapBpidOrg",
+            "description": "customer id",
+            "valueType": "s",
+            "valueRequired": false
+        },
+        {
+            "name": "valid",
+            "description": "is valid user",
+            "valueType": "s",
+            "valueRequired": false
+        }
+    ]
 }

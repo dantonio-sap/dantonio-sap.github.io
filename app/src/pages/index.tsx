@@ -23,8 +23,14 @@ function HomepageHeader() {
         <div className={styles.buttons}>
           {isLoggedIn ? (
             <div>
-              <p>Welcome, {user.firstName}!</p>
-              <div>{user.email}</div>
+              <p>
+                Welcome, {user.firstName} {user.lastName}!
+              </p>
+              <div>UserId: {user.ID}</div>
+              <div>Type: {user.type}</div>
+              <div>Company: {user.company}</div>
+              <div>CompanyId: {user.sapBpidOrg}</div>
+              <div>Email: {user.email}</div>
               <button onClick={() => logout()} className="button button--secondary button--lg">
                 Logout
               </button>

@@ -13,9 +13,13 @@ interface AuthContextProps {
 }
 
 interface UserInfo {
+  ID: string;
   firstName: string;
   lastName: string;
   email: string;
+  company: string;
+  sapBpidOrg: string;
+  type: string;
 }
 
 const AuthContext = createContext<AuthContextProps>({

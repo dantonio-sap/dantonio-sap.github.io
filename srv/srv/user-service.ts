@@ -30,27 +30,32 @@ const logoutSuccessHandler = async (req: Request) => {
 };
 
 const getUserInfoHandler = async (req: Request) => {
-  const { user } = cds?.context!;
-
+  const { user } = cds.context!;
+  console.log(JSON.stringify(user));
   const thisUser = {
+    ID: user?.id,
     firstName: user?.attr.givenName,
     lastName: user?.attr.familyName,
     email: user?.attr.email,
-    companyId: null,
+    companyId: user?.attr.sapBpidOrg[0],
+    company: user?.attr.company[0],
+    type: user?.attr.type[0],
   };
 
   // Check if exists and add if not, else update
-  const existingUser = await SELECT.one.from(Users).where({ email: thisUser.email });
-  let newUser;
+  const existingUser = await SELECT.one.from(Users).where({ ID: thisUser.ID });
   if (existingUser) {
     await UPDATE.entity(Users, { ID: existingUser.ID }).with({
       firstName: thisUser.firstName,
       lastName: thisUser.lastName,
+      email: thisUser.email,
       companyId: thisUser.companyId,
+      company: thisUser.company,
+      type: thisUser.type,
     });
   } else {
-    newUser = await INSERT.into(Users).entries(thisUser);
+    await INSERT.into(Users).entries(thisUser);
   }
 
-  return existingUser || thisUser;
+  return existingUser ?? thisUser;
 };

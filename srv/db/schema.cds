@@ -7,4 +7,6 @@ entity Users : cuid {
   lastName  : String;
   email     : String;
   companyId : String;
+  company   : String;
+  type      : String;
 }
