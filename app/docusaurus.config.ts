@@ -32,6 +32,10 @@ const config: Config = {
     locales: ["en"],
   },
 
+  customFields: {
+    api_url: process.env.BTP_API_URL, //URL expected not to include trailing slash
+  },
+
   presets: [
     [
       "classic",

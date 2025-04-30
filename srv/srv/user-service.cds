@@ -12,6 +12,6 @@ service UserService @(
     };
 
     function getUserInfo @(restrict: [{to: 'authenticated-user'}])() returns userInfo;
-    function login @(restrict: [{to: 'authenticated-user'}])()       returns Boolean;
-    function logoutSuccess()                                         returns Boolean;
+    function login()                                                 returns Boolean;
+    function loginSuccess()                                          returns String;
 }

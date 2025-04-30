@@ -7,7 +7,7 @@ import Heading from "@theme/Heading";
 
 import styles from "./index.module.css";
 import React from "react";
-import { useAuth } from "../authProviderApprouter";
+import { useAuth } from "../authProviderBTP";
 
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
@@ -19,7 +19,6 @@ function HomepageHeader() {
         <Heading as="h1" className="hero__title">
           {siteConfig.title}
         </Heading>
-        <p className="hero__subtitle">{siteConfig.tagline}</p>
         <div className={styles.buttons}>
           {isLoggedIn ? (
             <div>
@@ -29,7 +28,7 @@ function HomepageHeader() {
               <div>UserId: {user.ID}</div>
               <div>Type: {user.type}</div>
               <div>Company: {user.company}</div>
-              <div>CompanyId: {user.sapBpidOrg}</div>
+              <div>CompanyId: {user.companyId}</div>
               <div>Email: {user.email}</div>
               <button onClick={() => logout()} className="button button--secondary button--lg">
                 Logout

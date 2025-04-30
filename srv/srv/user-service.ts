@@ -1,13 +1,14 @@
 import cds, { Request } from "@sap/cds";
-import { getUserInfo, login, logoutSuccess } from "#cds-models/UserService";
+import { getUserInfo, login, loginSuccess } from "#cds-models/UserService";
+import xsenv from "@sap/xsenv";
 
 const { Users } = cds.entities;
-
+const xsuaa: any = xsenv.getServices({ xsuaa: { tag: "xsuaa" } }).xsuaa;
 export class UserService extends cds.ApplicationService {
   init() {
     // handlers
     this.on(login, (req) => loginHandler(req));
-    this.on(logoutSuccess, (req) => logoutSuccessHandler(req));
+    this.on(loginSuccess, (req) => loginSuccessHandler(req));
     this.on(getUserInfo, (req) => getUserInfoHandler(req));
 
     return super.init();
@@ -15,18 +16,36 @@ export class UserService extends cds.ApplicationService {
 }
 
 const loginHandler = async (req: Request) => {
-  const { http, user } = cds?.context!;
+  const { http } = cds.context!;
   const origin_uri = http?.req.query.origin_uri;
+  console.log(http?.req);
+  const callback_url = `${http?.req.protocol}://${http?.req.get("host")}/user/loginSuccess?origin_uri=${origin_uri}`;
+  const authorize_url = `${xsuaa.url}/oauth/authorize?response_type=code&client_id=${xsuaa.clientid}&redirect_uri=${callback_url}`;
 
-  http?.res.redirect(origin_uri!.toString());
+  http?.res.redirect(authorize_url);
 };
 
-const logoutSuccessHandler = async (req: Request) => {
-  const { http, user } = cds?.context!;
+const loginSuccessHandler = async (req: Request) => {
+  const { http } = cds.context!;
   const origin_uri = http?.req.query.origin_uri;
+  const callback_url = `${http?.req.protocol}://${http?.req.get("host")}/user/loginSuccess?origin_uri=${origin_uri}`;
 
-  console.log(`redirecting to ${origin_uri!.toString()}: User=${req.user.id}`);
-  http?.res.redirect(origin_uri!.toString());
+  const code = http?.req.query?.code || null;
+  if (code) {
+    // Get Token
+    const token_url = `${xsuaa.url}/oauth/token?grant_type=authorization_code&code=${code}&redirect_uri=${callback_url}`;
+    const encodedCredentials = btoa(`${xsuaa.clientid}:${xsuaa.clientsecret}`);
+    const token_response = await fetch(token_url, {
+      method: "POST",
+      headers: {
+        Authorization: `Basic ${encodedCredentials}`,
+      },
+    });
+    const token_data = await token_response.json();
+    http?.res.redirect(`${origin_uri}?t=${token_data.access_token}`);
+  } else {
+    http?.res.redirect(`${origin_uri}?e=UNAUTHORIZED`);
+  }
 };
 
 const getUserInfoHandler = async (req: Request) => {

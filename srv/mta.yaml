@@ -36,26 +36,26 @@ modules:
     requires:
       - name: btp-ai-best-practices-db
 
-  - name: btp-ai-best-practices-app
-    type: approuter.nodejs
-    path: app/router
-    parameters:
-      keep-existing-routes: true
-      disk-quota: 256M
-      memory: 256M
-    requires:
-      - name: srv-api
-        group: destinations
-        properties:
-          name: srv-api # must be used in xs-app.json as well
-          url: ~{srv-url}
-          forwardAuthToken: true
-      - name: btp-ai-best-practices-auth
-    build-parameters:
-      ignore: ["node_modules/", "default-env.json", "default-services.json"]
-    properties:
-      CORS: '[{ "uriPattern": "^/(.*)$","allowedOrigin": [{ "host": "dantonio-sap.github.io", "protocol": "https"}] }]'
-      COOKIES: '{ "SameSite": "None"}'
+  # - name: btp-ai-best-practices-app
+  #   type: approuter.nodejs
+  #   path: app/router
+  #   parameters:
+  #     keep-existing-routes: true
+  #     disk-quota: 256M
+  #     memory: 256M
+  #   requires:
+  #     - name: srv-api
+  #       group: destinations
+  #       properties:
+  #         name: srv-api # must be used in xs-app.json as well
+  #         url: ~{srv-url}
+  #         forwardAuthToken: true
+  #     - name: btp-ai-best-practices-auth
+  #   build-parameters:
+  #     ignore: ["node_modules/", "default-env.json", "default-services.json"]
+  #   properties:
+  #     CORS: '[{ "uriPattern": "^/(.*)$","allowedOrigin": [{ "host": "dantonio-sap.github.io", "protocol": "https"}] }]'
+  #     COOKIES: '{ "SameSite": "None"}'
 
 resources:
   - name: btp-ai-best-practices-db
